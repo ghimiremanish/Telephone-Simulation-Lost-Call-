@@ -9,6 +9,8 @@ sec_init = int(strftime("%S", gmtime()))
 check_link = 0 #to check whether the line have space or not
 clock = 0 #starts when program starts which generate time in seconds
 
+#flags
+busy_flag = 0
 print('Enter Link :')
 link = int(input())
 line = 2 * link + 2
@@ -41,6 +43,7 @@ while True:
         for a in nextarrival:
             if to == nextarrival[i][0] or From == nextarrival[i][1] or to == nextarrival[i][1] or From == nextarrival[i][0]:
                 busy += 1
+                busy_flag = 1
             i += 1
 
         #adding value to call in progress
@@ -56,12 +59,20 @@ while True:
         block += 1
 
     #clock change huna and check if length is completed or not
-    check_time = (int(strftime("%M", gmtime()))*60 + int(strftime("%S", gmtime()))) - (min_init*60 + sec_init)
-    if check_time >= length:
-        del nextarrival[0]
-        check_time = check_time - length
-        completed += 1
 
+    # check_time = (int(strftime("%M", gmtime()))*60 + int(strftime("%S", gmtime()))) - (min_init*60 + sec_init)
+    # if check_time >= length:
+    #     del nextarrival[0]
+    #     check_time = check_time - length
+    #     completed += 1
+    if busy_flag == 0:
+        check_time = (int(strftime("%M", gmtime()))*60 + int(strftime("%S", gmtime()))) - (min_init*60 + sec_init)
+        if check_time >= length:
+            del nextarrival[0]
+            check_time = check_time - length
+            completed += 1
+    else:
+        busy_flag = 0
 
 
     print("\nPress 'Y' OR 'N' to Exit or Stay in call")
